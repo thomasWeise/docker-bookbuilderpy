@@ -20,8 +20,26 @@ RUN echo "Initial update." &&\
     apt-get install -f -y git \
                           python3-pip &&\
     cd /tmp/ &&\
-    echo "Install Python-package bookbuilderpy." &&\
-     python3 -m pip install git+https://github.com/thomasWeise/bookbuilderpy.git &&\
+    echo "1: Updating all Python pacakges that are already installed." &&\
+    (python3 -c "import pkg_resources; from subprocess import call; packages = [dist.project_name for dist in pkg_resources.working_set]; call(\"pip install --upgrade \" + \" \".join(packages), shell=True)" || true) &&\
+    echo "2: Updating all Python pacakges that are already installed." &&\
+    pip3 list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1 | xargs -n1 pip3 install -U &&\
+    echo "3: Updating all Python pacakges that are already installed." &&\
+    pip3 freeze --local |sed -rn 's/^([^=# \t\\][^ \t=]*)=.*/echo; echo Processing \1 ...; pip3 install -U \1/p' |sh &&\
+    echo "4: Updating all Python pacakges that are already installed." &&\
+    (python3 -c "import pkg_resources; from subprocess import call; packages = [dist.project_name for dist in pkg_resources.working_set]; call(\"pip install --upgrade \" + \" \".join(packages), shell=True)" || true) &&\
+    echo "5: Updating all Python pacakges that are already installed." &&\
+    pip3 list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1 | xargs -n1 pip3 install -U &&\
+    echo "6: Updating all Python pacakges that are already installed." &&\
+    pip3 freeze --local |sed -rn 's/^([^=# \t\\][^ \t=]*)=.*/echo; echo Processing \1 ...; pip3 install -U \1/p' |sh &&\
+    echo "7: Updating all Python pacakges that are already installed." &&\
+    (python3 -c "import pkg_resources; from subprocess import call; packages = [dist.project_name for dist in pkg_resources.working_set]; call(\"pip install --upgrade \" + \" \".join(packages), shell=True)" || true) &&\
+    echo "8: Updating all Python pacakges that are already installed." &&\
+    pip3 list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1 | xargs -n1 pip3 install -U &&\
+    echo "9: Updating all Python pacakges that are already installed." &&\
+    pip3 freeze --local |sed -rn 's/^([^=# \t\\][^ \t=]*)=.*/echo; echo Processing \1 ...; pip3 install -U \1/p' |sh &&\
+    echo "Installing Python-package bookbuilderpy." &&\
+    python3 -m pip install git+https://github.com/thomasWeise/bookbuilderpy.git &&\
 # the directories for input and output
     echo "Make directories for input and output." &&\
     mkdir /input/ &&\
