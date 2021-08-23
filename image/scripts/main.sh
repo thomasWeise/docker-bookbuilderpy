@@ -14,7 +14,7 @@ cd /input/
 
 echo "Now executing the main bookbuilding process."
 
-python3 -c "from bookbuilderpy import Build; Build.run(input_file=\"/input/$1\", output_dir=\"/output/\"));"
+python3 -c "from bookbuilderpy import Build; Build.run(input_file=\"/input/$1\", output_dir=\"/output/\");"
 
 echo "Finished, exiting container."
 

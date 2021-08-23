@@ -18,7 +18,8 @@ RUN echo "Initial update." &&\
 # install git, which we need to access code repositories and pip
     echo "Install git." &&\
     apt-get install -f -y git \
-                          python3-pip &&\
+                          python3-pip \
+                          zip &&\
     cd /tmp/ &&\
     echo "1: Updating all Python pacakges that are already installed." &&\
     (python3 -c "import pkg_resources; from subprocess import call; packages = [dist.project_name for dist in pkg_resources.working_set]; call(\"pip install --upgrade \" + \" \".join(packages), shell=True)" || true) &&\
