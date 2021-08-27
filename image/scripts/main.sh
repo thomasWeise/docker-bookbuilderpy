@@ -12,6 +12,21 @@ set -o errexit   # set -e : exit the script if any statement returns a non-true 
 # enter the folder where the document is expected
 cd /input/
 
+echo "Here are the versions of all involved components:"
+echo "# python3:"
+python3 --version
+echo "# pdflatex:"
+pdflatex --version
+echo "# xelatex:"
+xelatex --version
+echo "# pandoc:"
+pandoc --version
+echo "# calibre:"
+calibre --version
+echo "# ghostscript (gs):"
+gs --version
+python3 -c 'import bookbuilderpy as bp; print(f"# bookbuilderpy {bp.__version__}");'
+
 echo "Now executing the main bookbuilding process."
 
 python3 -c "from bookbuilderpy import Build; Build.run(input_file=\"/input/$1\", output_dir=\"/output/\");"
