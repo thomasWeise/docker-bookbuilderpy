@@ -20,13 +20,13 @@ In order to avoid installing all required software and even to avoid messing wit
 
 If you have Linux and docker installed on your system, all what it takes is the following command:
 
-      docker run -v "INPUT_DIR":/input/ \
+      docker run -v "INPUT_DIR":/input/:ro \
                  -v "OUTPUT_DIR":/output/ \
                  -t -i thomasweise/docker-bookbuilderpy BOOK_ROOT_MD_FILE
 
 Here, it is assumed that
 
-- `INPUT_DIR` is the directory where your book sources reside, let's say `/home/my/book/sources/`.
+- `INPUT_DIR` is the directory where your book sources reside, let's say `/home/my/book/sources/`. (By adding `:ro`, we mount the input directory read-only, just in case.)
 - `BOOK_ROOT_MD_FILE` is the root file of your book, say `book.md` (in which case, the full path of `book.md` would be `/home/my/book/sources/book.md`). Notice that you can specify only a single file, but this file can reference other files in sub-directories of `INPUT_DIR` by using commands such as  `\relative.input`.
 - `OUTPUT_DIR` is the output directory where the compiled files should be placed, e.g., `/home/my/book/compiled/`. This is where the resulting files will be placed.
 
