@@ -22,7 +22,7 @@ If you have Linux and docker installed on your system, all what it takes is the 
 
       docker run -v "INPUT_DIR":/input/:ro \
                  -v "OUTPUT_DIR":/output/ \
-                 -t -i thomasweise/docker-bookbuilderpy BOOK_ROOT_MD_FILE
+                 thomasweise/docker-bookbuilderpy BOOK_ROOT_MD_FILE
 
 Here, it is assumed that
 
