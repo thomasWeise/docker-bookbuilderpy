@@ -20,15 +20,37 @@ In order to avoid installing all required software and even to avoid messing wit
 
 If you have Linux and docker installed on your system, all what it takes is the following command:
 
-      docker run -v "INPUT_DIR":/input/:ro \
-                 -v "OUTPUT_DIR":/output/ \
-                 thomasweise/docker-bookbuilderpy BOOK_ROOT_MD_FILE
+```shell
+docker run -v "INPUT_DIR":/input/:ro \
+           -v "OUTPUT_DIR":/output/ \
+           thomasweise/docker-bookbuilderpy BOOK_ROOT_MD_FILE
+```
 
+Under many distributions, you need to run this command as `sudo`.
 Here, it is assumed that
 
 - `INPUT_DIR` is the directory where your book sources reside, let's say `/home/my/book/sources/`. (By adding `:ro`, we mount the input directory read-only, just in case.)
-- `BOOK_ROOT_MD_FILE` is the root file of your book, say `book.md` (in which case, the full path of `book.md` would be `/home/my/book/sources/book.md`). Notice that you can specify only a single file, but this file can reference other files in sub-directories of `INPUT_DIR` by using commands such as  `\relative.input`.
+- `BOOK_ROOT_MD_FILE` is the root file of your book, say `book.md` (in which case, the full path of `book.md` would be `/home/my/book/sources/book.md`). Notice that you can specify only a single file, but this file can reference other files in sub-directories of `INPUT_DIR` by using commands such as  `\rel.input` (see [below](#32-bookbuilderpy-specific-commands)).
 - `OUTPUT_DIR` is the output directory where the compiled files should be placed, e.g., `/home/my/book/compiled/`. This is where the resulting files will be placed.
+
+If you want to try the above, you can clone the "minimal working example" repository [thomasWeise/bookbuilderpy-mwe](https://github.com/thomasWeise/bookbuilderpy-mwe) and run the process to see what it does as follows **execute the code below at your own risk**:
+
+```shell
+mkdir example
+cd example
+git clone https://github.com/thomasWeise/bookbuilderpy-mwe.git
+mkdir result
+sudo docker run -v "$(pwd)/bookbuilderpy-mwe":/input/:ro -v "$(pwd)/result":/output/ thomasweise/docker-bookbuilderpy book.md
+sudo chown $USER -R result
+```
+
+Above, we create a folder called `example`.
+We then clone the repository [thomasWeise/bookbuilderpy-mwe](https://github.com/thomasWeise/bookbuilderpy-mwe), creating the folder `bookbuilderpy-mwe` containing the example book sources.
+Then, directory `result` is created, into which we will build the book.
+With `sudo docker run -v bookbuilderpy-mwe:/input/:ro -v result:/output/ thomasweise/docker-bookbuilderpy book.md`, the build process is executed.
+Since it runs under `sudo`, the files will be generated with `sudo` permissions/ownership, so we transfer them to the user ownership via `sudo chown $USER -R result`.
+You can now peek into the `result` folder.
+It will contain a file `index.html`, which is the automatically generated (bare minimum) book website, from which you can access all other generated files.
 
 And that's it.
 No software installation, besides docker, is required.
