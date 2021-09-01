@@ -21,20 +21,37 @@ RUN echo "Initial update." &&\
                           python3-pip \
                           zip &&\
     cd /tmp/ &&\
-    echo "1: Updating all Python pacakges that are already installed." &&\
+    echo "1: Updating all Python packages that are already installed." &&\
     (python3 -c "import pkg_resources; from subprocess import call; packages = [dist.project_name for dist in pkg_resources.working_set]; call(\"pip install --upgrade \" + \" \".join(packages), shell=True)" || true) &&\
-    echo "2: Updating all Python pacakges that are already installed." &&\
+    echo "2: Updating all Python packages that are already installed." &&\
     (pip3 freeze --local |sed -rn 's/^([^=# \t\\][^ \t=]*)=.*/echo; echo Processing \1 ...; pip3 install -U \1/p' |sh || true) &&\
-    echo "3: Updating all Python pacakges that are already installed." &&\
+    echo "3: Updating all Python packages that are already installed." &&\
     (python3 -c "import pkg_resources; from subprocess import call; packages = [dist.project_name for dist in pkg_resources.working_set]; call(\"pip install --upgrade \" + \" \".join(packages), shell=True)" || true) &&\
-    echo "4: Updating all Python pacakges that are already installed." &&\
+    echo "4: Updating all Python packages that are already installed." &&\
     (pip3 freeze --local |sed -rn 's/^([^=# \t\\][^ \t=]*)=.*/echo; echo Processing \1 ...; pip3 install -U \1/p' |sh || true) &&\
-    echo "5: Updating all Python pacakges that are already installed." &&\
+    echo "5: Updating all Python packages that are already installed." &&\
     (python3 -c "import pkg_resources; from subprocess import call; packages = [dist.project_name for dist in pkg_resources.working_set]; call(\"pip install --upgrade \" + \" \".join(packages), shell=True)" || true) &&\
-    echo "6: Updating all Python pacakges that are already installed." &&\
+    echo "6: Updating all Python packages that are already installed." &&\
     (pip3 freeze --local |sed -rn 's/^([^=# \t\\][^ \t=]*)=.*/echo; echo Processing \1 ...; pip3 install -U \1/p' |sh || true) &&\
     echo "Installing Python-package bookbuilderpy." &&\
-    python3 -m pip install git+https://github.com/thomasWeise/bookbuilderpy.git &&\
+    python3 -m pip install git+https://github.com/thomasWeise/bookbuilderpy.git@1.3 &&\
+    echo "Cleaning up pip and other stuff." &&\
+    rm -rf /root/.cache/ &&\
+    rm -rf /usr/lib/python3/dist-packages/ &&\
+    rm -rf /usr/local/lib/python3.9/dist-packages/*.dist-info &&\
+    rm -rf /usr/local/lib/python3.9/dist-packages/pip &&\
+    rm -rf /usr/local/lib/python3.9/dist-packages/wheel &&\
+    rm -rf /usr/local/lib/python3.9/dist-packages/yapftests &&\
+# test the whole build process one time
+    echo "Testing the build process using minimal working example." &&\
+    cd /tmp/ &&\
+    mkdir example &&\
+    cd example &&\
+    git clone https://github.com/thomasWeise/bookbuilderpy-mwe.git &&\
+    mkdir result &&\
+    python3 -c "from bookbuilderpy import Build; Build.run(input_file=\"/tmp/example/bookbuilderpy-mwe/book.md\", output_dir=\"/tmp/example/result/\", exit_on_error=True);" &&\
+    cd /tmp/ &&\
+    rm -rf example &&\
 # the directories for input and output
     echo "Make directories for input and output." &&\
     mkdir /input/ &&\

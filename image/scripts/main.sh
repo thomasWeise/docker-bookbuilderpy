@@ -11,6 +11,6 @@ set -o errexit   # set -e : exit the script if any statement returns a non-true 
 
 # enter the folder where the document is expected
 cd /input/
-python3 -c "from bookbuilderpy import Build; Build.run(input_file=\"/input/$1\", output_dir=\"/output/\");"
+python3 -c "from bookbuilderpy import Build; Build.run(input_file=\"/input/$1\", output_dir=\"/output/\", exit_on_error=True);"
 
 exit
