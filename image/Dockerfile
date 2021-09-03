@@ -34,7 +34,7 @@ RUN echo "Initial update." &&\
     echo "6: Updating all Python packages that are already installed." &&\
     (pip3 freeze --local |sed -rn 's/^([^=# \t\\][^ \t=]*)=.*/echo; echo Processing \1 ...; pip3 install -U \1/p' |sh || true) &&\
     echo "Installing Python-package bookbuilderpy." &&\
-    python3 -m pip install git+https://github.com/thomasWeise/bookbuilderpy.git@1.5 &&\
+    python3 -m pip install git+https://github.com/thomasWeise/bookbuilderpy.git@1.6 &&\
     echo "Cleaning up unneeded packages and other stuff." &&\
     apt-get remove -y binutils binutils-common binutils-x86-64-linux-gnu \
                       build-essential bzip2 cpp  cpp-11 dirmngr dpkg-dev \
@@ -49,6 +49,10 @@ RUN echo "Initial update." &&\
                       libksba8 liblsan0 libmpc3 libnpth0 libquadmath0 \
                       libstdc++-11-dev libtsan0 libubsan1 \
                       lto-disabled-list pinentry-curses python3-pip &&\
+    apt-get -y autoremove &&\
+    apt-get -y autorclean &&\
+    apt-get -y autoremove &&\
+    apt-get -y autorclean &&\
     rm -rf /root/.cache/ &&\
     rm -rf /usr/lib/python3/dist-packages/ &&\
     rm -rf /usr/local/lib/python3.9/dist-packages/*.dist-info &&\
