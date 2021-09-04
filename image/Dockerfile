@@ -49,10 +49,6 @@ RUN echo "Initial update." &&\
                       libksba8 liblsan0 libmpc3 libnpth0 libquadmath0 \
                       libstdc++-11-dev libtsan0 libubsan1 \
                       lto-disabled-list pinentry-curses python3-pip &&\
-    apt-get -y autoremove &&\
-    apt-get -y autorclean &&\
-    apt-get -y autoremove &&\
-    apt-get -y autorclean &&\
     rm -rf /root/.cache/ &&\
     rm -rf /usr/lib/python3/dist-packages/ &&\
     rm -rf /usr/local/lib/python3.9/dist-packages/*.dist-info &&\
