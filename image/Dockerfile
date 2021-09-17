@@ -17,7 +17,9 @@ RUN echo "Initial update." &&\
     apt-get update &&\
 # install git, which we need to access code repositories and pip
     echo "Install git." &&\
-    apt-get install -f -y git \
+    apt-get install -f -y firefox \
+                          firefox-geckodriver \
+                          git \
                           python3-pip \
                           zip &&\
     cd /tmp/ &&\
