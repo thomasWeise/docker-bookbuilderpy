@@ -9,7 +9,7 @@
 # software components inside the image are under the respective
 # licenses chosen by their respective copyright holders.
 #
-FROM thomasweise/docker-pandoc-calibre:3.1
+FROM thomasweise/docker-pandoc-calibre:3.2
 MAINTAINER Thomas Weise <tweise@hfuu.edu.cn>
 
 # do all the installation
@@ -36,7 +36,7 @@ RUN echo "Initial update." &&\
     echo "6: Updating all Python packages that are already installed." &&\
     (pip3 freeze --local |sed -rn 's/^([^=# \t\\][^ \t=]*)=.*/echo; echo Processing \1 ...; pip3 install -U \1/p' |sh || true) &&\
     echo "Installing Python-package bookbuilderpy." &&\
-    python3 -m pip install git+https://github.com/thomasWeise/bookbuilderpy.git@1.7 &&\
+    python3 -m pip install git+https://github.com/thomasWeise/bookbuilderpy.git@1.8 &&\
     echo "Cleaning up unneeded packages and other stuff." &&\
     apt-get remove -y binutils binutils-common binutils-x86-64-linux-gnu \
                       build-essential bzip2 cpp  cpp-11 dirmngr dpkg-dev \
