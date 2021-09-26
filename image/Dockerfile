@@ -20,6 +20,9 @@ RUN echo "Initial update." &&\
     apt-get install -f -y firefox \
                           firefox-geckodriver \
                           git \
+                          libcairo2-dev \
+                          libgirepository1.0-dev \
+                          pkg-config \
                           python3-pip \
                           zip &&\
     cd /tmp/ &&\
@@ -36,7 +39,7 @@ RUN echo "Initial update." &&\
     echo "6: Updating all Python packages that are already installed." &&\
     (pip3 freeze --local |sed -rn 's/^([^=# \t\\][^ \t=]*)=.*/echo; echo Processing \1 ...; pip3 install -U \1/p' |sh || true) &&\
     echo "Installing Python-package bookbuilderpy." &&\
-    python3 -m pip install git+https://github.com/thomasWeise/bookbuilderpy.git@1.8 &&\
+    python3 -m pip install git+https://github.com/thomasWeise/bookbuilderpy.git@1.9.1 &&\
     echo "Cleaning up unneeded packages and other stuff." &&\
     apt-get remove -y binutils binutils-common binutils-x86-64-linux-gnu \
                       build-essential bzip2 cpp  cpp-11 dirmngr dpkg-dev \
@@ -52,11 +55,6 @@ RUN echo "Initial update." &&\
                       libstdc++-11-dev libtsan0 libubsan1 \
                       lto-disabled-list pinentry-curses python3-pip &&\
     rm -rf /root/.cache/ &&\
-    rm -rf /usr/lib/python3/dist-packages/ &&\
-    rm -rf /usr/local/lib/python3.9/dist-packages/*.dist-info &&\
-    rm -rf /usr/local/lib/python3.9/dist-packages/pip &&\
-    rm -rf /usr/local/lib/python3.9/dist-packages/wheel &&\
-    rm -rf /usr/local/lib/python3.9/dist-packages/yapftests &&\
 # test the whole build process one time
     echo "Testing the build process using minimal working example." &&\
     cd /tmp/ &&\
