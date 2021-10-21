@@ -21,6 +21,7 @@ RUN echo "Initial update." &&\
                           firefox-geckodriver \
                           git \
                           libcairo2-dev \
+                          libdbus-1-dev \
                           libgirepository1.0-dev \
                           pkg-config \
                           python3-pip \
