@@ -39,12 +39,11 @@ RUN echo "Initial update." &&\
     (python3 -c "import pkg_resources; from subprocess import call; packages = [dist.project_name for dist in pkg_resources.working_set]; call(\"pip install --upgrade \" + \" \".join(packages), shell=True)" || true) &&\
     echo "6: Updating all Python packages that are already installed." &&\
     (pip3 freeze --local |sed -rn 's/^([^=# \t\\][^ \t=]*)=.*/echo; echo Processing \1 ...; pip3 install -U \1/p' |sh || true) &&\
-    export bbp_version="1.9.15" &&\
+    export bbp_version="1.9.16" &&\
     echo "Installing Python-package bookbuilderpy version ${bbp_version}." &&\
     mkdir /tmp/bbp &&\
     cd /tmp/bbp &&\
-    curl -L -v -o bbp.tar.gz "https://github.com/thomasWeise/bookbuilderpy/archive/refs/tags/${bbp_version}.tar.gz" &&\
-    tar -xf /tmp/bbp/bbp.tar.gz &&\
+    curl -L -v "https://github.com/thomasWeise/bookbuilderpy/archive/refs/tags/${bbp_version}.tar.gz" | tar zx &&\
     pip3 install /tmp/bbp/bookbuilderpy-${bbp_version} &&\
     cd /tmp/ &&\
     rm -rf /tmp/bbp/ &&\
