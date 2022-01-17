@@ -9,7 +9,7 @@
 # software components inside the image are under the respective
 # licenses chosen by their respective copyright holders.
 #
-FROM thomasweise/docker-pandoc-calibre:3.3
+FROM thomasweise/docker-pandoc-calibre:4.0
 MAINTAINER Thomas Weise <tweise@hfuu.edu.cn>
 
 # do all the installation
@@ -17,16 +17,18 @@ RUN echo "Initial update." &&\
     apt-get update &&\
 # install git, which we need to access code repositories and pip
     echo "Install git." &&\
-    apt-get install -f -y firefox \
-                          firefox-geckodriver \
-                          git \
-                          libcairo2-dev \
-                          libdbus-1-dev \
-                          libgirepository1.0-dev \
-                          pkg-config \
-                          python3-pip \
-                          zip &&\
+    apt-get install -f -y --no-install-recommends firefox \
+                                                  firefox-geckodriver \
+                                                  git \
+                                                  libcairo2-dev \
+                                                  libdbus-1-dev \
+                                                  libgirepository1.0-dev \
+                                                  pkg-config \
+                                                  python3-pip \
+                                                  zip &&\
     cd /tmp/ &&\
+    echo "0: Updating pip" &&\
+    pip install --upgrade pip &&\
     echo "1: Updating all Python packages that are already installed." &&\
     (python3 -c "import pkg_resources; from subprocess import call; packages = [dist.project_name for dist in pkg_resources.working_set]; call(\"pip install --upgrade \" + \" \".join(packages), shell=True)" || true) &&\
     echo "2: Updating all Python packages that are already installed." &&\
