@@ -18,7 +18,6 @@ RUN echo "Initial update." &&\
 # install git, which we need to access code repositories and pip
     echo "Install git." &&\
     apt-get install -f -y --no-install-recommends firefox \
-                                                  firefox-geckodriver \
                                                   git \
                                                   libcairo2-dev \
                                                   libdbus-1-dev \
