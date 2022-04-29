@@ -15,17 +15,46 @@ MAINTAINER Thomas Weise <tweise@hfuu.edu.cn>
 # do all the installation
 RUN echo "Initial update." &&\
     apt-get update &&\
-# install git, which we need to access code repositories and pip
-    echo "Install git." &&\
-    apt-get install -f -y --no-install-recommends firefox \
-                                                  git \
+    echo "Install python and git and other tools." &&\
+    apt-get install -f -y --no-install-recommends git \
                                                   libcairo2-dev \
                                                   libdbus-1-dev \
                                                   libgirepository1.0-dev \
                                                   pkg-config \
                                                   python3-pip \
                                                   zip &&\
+    echo "Done installing python and git, got the following versions:" &&\
+    git --version &&\
+    python3 --version &&\
+# Installing firefox and firefox geckdriver is a major headache now.
+# They come as snaps and that doesn't work here.
+# Adding the ppa for installing the deb files instead won't work either.
+# So we first install all requirements, then download the deb files and install them.
+# This means that we a) need to deal with stale deb urls and b) need to check the requirements perpetuously.
+# Sigh.
+    echo "Now installing firefox requirements."  &&\
+    apt-get install -f -y --no-install-recommends lsb-release \
+                                                  libasound2 \
+                                                  libatk1.0-0 \
+                                                  libdbus-glib-1-2 \
+                                                  libgtk-3-0  \
+                                                  libxcomposite1 \
+                                                  libxcursor1 \
+                                                  libxdamage1 \
+                                                  libxrandr2 \
+                                                  libxtst6 &&\
+# got urls from https://ppa.launchpadcontent.net/mozillateam/ppa/ubuntu/pool/main/f/firefox/
+    echo "Now installing firefox as deb (as opposed to snap)." &&\
     cd /tmp/ &&\
+    curl -L "https://ppa.launchpadcontent.net/mozillateam/ppa/ubuntu/pool/main/f/firefox/firefox_100.0+build1-0ubuntu0.22.04.1~mt1_amd64.deb" -o firefox.deb &&\
+    dpkg -i firefox.deb &&\
+    rm -f firefox.deb &&\
+    curl -L "https://ppa.launchpadcontent.net/mozillateam/ppa/ubuntu/pool/main/f/firefox/firefox-geckodriver_100.0+build1-0ubuntu0.22.04.1~mt1_amd64.deb" -o firefox-geckodriver.deb &&\
+    dpkg -i firefox-geckodriver.deb &&\
+    rm -f firefox-geckodriver.deb &&\
+    echo "Done installing firefox and firefox-geckodriver. Got versions:" &&\
+    firefox --version &&\
+    geckodriver --version &&\
     echo "0: Updating pip" &&\
     pip install --upgrade pip &&\
     echo "1: Updating all Python packages that are already installed." &&\
@@ -63,22 +92,24 @@ RUN echo "Initial update." &&\
                       libstdc++-11-dev libtsan0 libubsan1 \
                       lto-disabled-list pinentry-curses python3-pip &&\
     rm -rf /root/.cache/ &&\
-# test the whole build process one time
-    echo "Testing the build process using minimal working example." &&\
-    cd /tmp/ &&\
-    mkdir example &&\
-    cd example &&\
-    git clone https://github.com/thomasWeise/bookbuilderpy-mwe.git &&\
-    mkdir result &&\
-    python3 -c "from bookbuilderpy import Build; Build.run(input_file=\"/tmp/example/bookbuilderpy-mwe/book.md\", output_dir=\"/tmp/example/result/\", exit_on_error=True);" &&\
-    cd /tmp/ &&\
-    rm -rf example &&\
 # the directories for input and output
     echo "Make directories for input and output." &&\
     mkdir /input/ &&\
     mkdir /output/ &&\
+# marking input directory as safe.
+    echo "Marking /input as safe directory." &&\
+    git config --global --add safe.directory /input &&\
+# test the whole build process one time
+    echo "Testing the build process using minimal working example." &&\
+    cd /input/ &&\
+    git clone https://github.com/thomasWeise/bookbuilderpy-mwe.git &&\
+    python3 -c "from bookbuilderpy import Build; Build.run(input_file=\"/input/bookbuilderpy-mwe/book.md\", output_dir=\"/output/\", exit_on_error=True);" &&\
+    echo "Cleaning up example." &&\
+    rm -rf /input/* &&\
+    rm -rf /output/* &&\
 # cleanup
     echo "Final cleanup." &&\
+    cd /tmp &&\
     apt-get clean &&\
     rm -rf /tmp/* /var/tmp/* &&\
     rm -rf /var/lib/apt/lists/* &&\
