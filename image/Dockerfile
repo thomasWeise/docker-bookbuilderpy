@@ -73,19 +73,12 @@ RUN echo "Initial update." &&\
     echo "Installing Python-package bookbuilderpy version ${bbp_version}." &&\
     pip3 install bookbuilderpy==${bbp_version} &&\
     echo "Cleaning up unneeded packages and other stuff." &&\
-    apt-get remove -y binutils binutils-common binutils-x86-64-linux-gnu \
-                      build-essential bzip2 cpp  cpp-11 dirmngr dpkg-dev \
-                      fakeroot g++ g++-11 gcc gcc-11 gnupg gnupg-l10n  \
-                      gnupg-utils gpg gpg-agent gpg-wks-client \
-                      gpg-wks-server gpgconf gpgsm libalgorithm-diff-perl \
-                      libalgorithm-diff-xs-perl libalgorithm-merge-perl \
-                      libasan6 libassuan0 libatomic1 libbinutils libcc1-0 \
-                      libctf-nobfd0 libctf0 libdpkg-perl libexpat1-dev \
-                      libfakeroot libfile-fcntllock-perl libgcc-11-dev \
-                      libisl23 libitm1 libjs-sphinxdoc libjs-underscore \
-                      libksba8 liblsan0 libmpc3 libnpth0 libquadmath0 \
-                      libstdc++-11-dev libtsan0 libubsan1 \
-                      lto-disabled-list pinentry-curses python3-pip &&\
+    (apt-get remove -y binutils binutils-common binutils-x86-64-linux-gnu \
+                       build-essential bzip2 cpp  cpp-11 dpkg-dev \
+                       g++ g++-11 gcc gcc-11 libasan6 libatomic1 libbinutils libcc1-0 \
+                       libctf-nobfd0 libctf0 libdpkg-perl libexpat1-dev libgcc-11-dev \
+                       libisl23 libitm1 liblsan0 libmpc3 libquadmath0 libstdc++-11-dev \
+                       libtsan0 libubsan1 lto-disabled-list python3-pip || true) &&\
     rm -rf /root/.cache/ &&\
 # the directories for input and output
     echo "Make directories for input and output." &&\
