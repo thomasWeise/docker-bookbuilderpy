@@ -4,3 +4,4 @@
 .Ruserdata
 docker-bookbuilderpy.Rproj
 *.Rproj
+.project

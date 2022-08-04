@@ -9,7 +9,7 @@
 # software components inside the image are under the respective
 # licenses chosen by their respective copyright holders.
 #
-FROM thomasweise/docker-pandoc-calibre:4.1
+FROM thomasweise/docker-pandoc-calibre:5.0
 MAINTAINER Thomas Weise <tweise@hfuu.edu.cn>
 
 # do all the installation
@@ -46,10 +46,10 @@ RUN echo "Initial update." &&\
 # got urls from https://ppa.launchpadcontent.net/mozillateam/ppa/ubuntu/pool/main/f/firefox/
     echo "Now installing firefox as deb (as opposed to snap)." &&\
     cd /tmp/ &&\
-    curl -L "https://ppa.launchpadcontent.net/mozillateam/ppa/ubuntu/pool/main/f/firefox/firefox_100.0+build1-0ubuntu0.22.04.1~mt1_amd64.deb" -o firefox.deb &&\
-    dpkg -i firefox.deb &&\
+    curl -L "https://ppa.launchpadcontent.net/mozillateam/ppa/ubuntu/pool/main/f/firefox/firefox_103.0.1+build1-0ubuntu0.22.10.1~mt1_amd64.deb" -o firefox.deb &&\
+    dpkg -i --ignore-depends=libx11-xcb1 firefox.deb &&\
     rm -f firefox.deb &&\
-    curl -L "https://ppa.launchpadcontent.net/mozillateam/ppa/ubuntu/pool/main/f/firefox/firefox-geckodriver_100.0+build1-0ubuntu0.22.04.1~mt1_amd64.deb" -o firefox-geckodriver.deb &&\
+    curl -L "https://ppa.launchpadcontent.net/mozillateam/ppa/ubuntu/pool/main/f/firefox/firefox-geckodriver_103.0.1+build1-0ubuntu0.22.10.1~mt1_amd64.deb" -o firefox-geckodriver.deb &&\
     dpkg -i firefox-geckodriver.deb &&\
     rm -f firefox-geckodriver.deb &&\
     echo "Done installing firefox and firefox-geckodriver. Got versions:" &&\
@@ -69,14 +69,9 @@ RUN echo "Initial update." &&\
     (python3 -c "import pkg_resources; from subprocess import call; packages = [dist.project_name for dist in pkg_resources.working_set]; call(\"pip install --upgrade \" + \" \".join(packages), shell=True)" || true) &&\
     echo "6: Updating all Python packages that are already installed." &&\
     (pip3 freeze --local |sed -rn 's/^([^=# \t\\][^ \t=]*)=.*/echo; echo Processing \1 ...; pip3 install -U \1/p' |sh || true) &&\
-    export bbp_version="1.9.19" &&\
+    export bbp_version="1.9.23" &&\
     echo "Installing Python-package bookbuilderpy version ${bbp_version}." &&\
-    mkdir /tmp/bbp &&\
-    cd /tmp/bbp &&\
-    curl -L -v "https://github.com/thomasWeise/bookbuilderpy/archive/refs/tags/${bbp_version}.tar.gz" | tar zx &&\
-    pip3 install /tmp/bbp/bookbuilderpy-${bbp_version} &&\
-    cd /tmp/ &&\
-    rm -rf /tmp/bbp/ &&\
+    pip3 install bookbuilderpy==${bbp_version} &&\
     echo "Cleaning up unneeded packages and other stuff." &&\
     apt-get remove -y binutils binutils-common binutils-x86-64-linux-gnu \
                       build-essential bzip2 cpp  cpp-11 dirmngr dpkg-dev \
