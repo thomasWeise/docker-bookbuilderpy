@@ -69,7 +69,7 @@ RUN echo "Initial update." &&\
     (python3 -c "import pkg_resources; from subprocess import call; packages = [dist.project_name for dist in pkg_resources.working_set]; call(\"pip install --upgrade \" + \" \".join(packages), shell=True)" || true) &&\
     echo "6: Updating all Python packages that are already installed." &&\
     (pip3 freeze --local |sed -rn 's/^([^=# \t\\][^ \t=]*)=.*/echo; echo Processing \1 ...; pip3 install -U \1/p' |sh || true) &&\
-    export bbp_version="1.9.23" &&\
+    export bbp_version="1.9.24" &&\
     echo "Installing Python-package bookbuilderpy version ${bbp_version}." &&\
     pip3 install bookbuilderpy==${bbp_version} &&\
     echo "Cleaning up unneeded packages and other stuff." &&\
