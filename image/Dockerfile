@@ -46,10 +46,10 @@ RUN echo "Initial update." &&\
 # got urls from https://ppa.launchpadcontent.net/mozillateam/ppa/ubuntu/pool/main/f/firefox/
     echo "Now installing firefox as deb (as opposed to snap)." &&\
     cd /tmp/ &&\
-    curl -L "https://ppa.launchpadcontent.net/mozillateam/ppa/ubuntu/pool/main/f/firefox/firefox_103.0.1+build1-0ubuntu0.22.10.1~mt1_amd64.deb" -o firefox.deb &&\
+    curl -L "https://ppa.launchpadcontent.net/mozillateam/ppa/ubuntu/pool/main/f/firefox/firefox_103.0.2+build1-0ubuntu0.22.10.1~mt1_amd64.deb" -o firefox.deb &&\
     dpkg -i --ignore-depends=libx11-xcb1 firefox.deb &&\
     rm -f firefox.deb &&\
-    curl -L "https://ppa.launchpadcontent.net/mozillateam/ppa/ubuntu/pool/main/f/firefox/firefox-geckodriver_103.0.1+build1-0ubuntu0.22.10.1~mt1_amd64.deb" -o firefox-geckodriver.deb &&\
+    curl -L "https://ppa.launchpadcontent.net/mozillateam/ppa/ubuntu/pool/main/f/firefox/firefox-geckodriver_103.0.2+build1-0ubuntu0.22.10.1~mt1_amd64.deb" -o firefox-geckodriver.deb &&\
     dpkg -i firefox-geckodriver.deb &&\
     rm -f firefox-geckodriver.deb &&\
     echo "Done installing firefox and firefox-geckodriver. Got versions:" &&\
@@ -69,7 +69,7 @@ RUN echo "Initial update." &&\
     (python3 -c "import pkg_resources; from subprocess import call; packages = [dist.project_name for dist in pkg_resources.working_set]; call(\"pip install --upgrade \" + \" \".join(packages), shell=True)" || true) &&\
     echo "6: Updating all Python packages that are already installed." &&\
     (pip3 freeze --local |sed -rn 's/^([^=# \t\\][^ \t=]*)=.*/echo; echo Processing \1 ...; pip3 install -U \1/p' |sh || true) &&\
-    export bbp_version="1.9.24" &&\
+    export bbp_version="1.9.25" &&\
     echo "Installing Python-package bookbuilderpy version ${bbp_version}." &&\
     pip3 install bookbuilderpy==${bbp_version} &&\
     echo "Cleaning up unneeded packages and other stuff." &&\
